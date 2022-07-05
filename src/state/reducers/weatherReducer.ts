@@ -1,5 +1,6 @@
+import { IWeather, StateActions } from "../interfaces";
+
 import { WEATHER } from "../ActionTypes";
-import { IWeather, StateActions } from "./../interfaces";
 
 const weatherReducer = (weather: IWeather, action: StateActions) => {
   switch (action.type) {

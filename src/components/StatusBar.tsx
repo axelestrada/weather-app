@@ -1,36 +1,36 @@
 import { FC, ReactElement } from "react";
 
 interface IStatusBar {
-  children: ReactElement[];
   title?: string;
+  leftIcon: ReactElement;
+  rightIcon: ReactElement;
 }
 
-const StatusBar: FC<IStatusBar> = ({ children, title }) => (
+const StatusBar: FC<IStatusBar> = ({ title, leftIcon, rightIcon }) => (
   <div className="flex justify-between items-center">
-    {children && children[0]}
+    <StatusBarButton icon={leftIcon} />
 
     {title && <h2 className="text-blueberry font-medium">{title}</h2>}
 
-    {children && children[1]}
+    <StatusBarButton icon={rightIcon} type="gradient" />
   </div>
 );
 
 interface IStatusBarButton {
-  children: ReactElement;
-  className?: string;
+  icon: ReactElement;
+  type?: "gradient" | "default";
 }
 
-export const StatusBarButton: FC<IStatusBarButton> = ({
-  children,
-  className,
-}) => (
+const StatusBarButton: FC<IStatusBarButton> = ({ icon, type }) => (
   <button
     type="button"
-    className={`flex justify-center items-center w-11 h-11 rounded-lg text-3xl shadow-lg shadow-gray-150 bg-white ${
-      className || ""
+    className={`flex justify-center items-center w-11 h-11 rounded-lg text-3xl shadow-lg ${
+      type === "gradient"
+        ? "text-white bg-gradient-to-br from-pale-cornflower-blue to-blueberry shadow-french-sky-blue-300"
+        : "bg-white shadow-gray-150"
     }`}
   >
-    {children}
+    {icon}
   </button>
 );
 

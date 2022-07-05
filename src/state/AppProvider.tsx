@@ -1,11 +1,20 @@
 import {
-  createContext,
   Dispatch,
   ReactNode,
+  createContext,
   useEffect,
   useReducer,
 } from "react";
-import { ISettingsAction, IState, IWeatherAction, StateActions } from "./interfaces";
+import {
+  IForecastAction,
+  ISettingsAction,
+  IState,
+  IWeather,
+  IWeatherAction,
+  StateActions,
+} from "./interfaces";
+
+import forecastReducer from "./reducers/forecastReducer";
 import settingsReducer from "./reducers/settingsReducer";
 import weatherReducer from "./reducers/weatherReducer";
 
@@ -48,6 +57,11 @@ const initialState: IState = JSON.parse(
     ],
     wind: { speed: 0 },
   },
+  forecast: {
+    list: [{
+      
+    }],
+  },
 };
 
 const AppContext = createContext<{
@@ -56,11 +70,12 @@ const AppContext = createContext<{
 }>({ state: initialState, dispatch: () => null });
 
 const combinedReducers = (
-  { settings, weather }: IState,
-  action: ISettingsAction | IWeatherAction
+  { settings, weather, forecast }: IState,
+  action: ISettingsAction | IWeatherAction | IForecastAction
 ) => ({
   settings: settingsReducer(settings, action),
   weather: weatherReducer(weather, action),
+  forecast: forecastReducer(forecast, action)
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {

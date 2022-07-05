@@ -1,4 +1,4 @@
-import { SETTINGS, WEATHER } from "./ActionTypes";
+import { FORECAST, SETTINGS, WEATHER } from "./ActionTypes";
 
 //Weather Data
 export interface IWeather {
@@ -30,6 +30,29 @@ export interface IWeatherAction {
   payload: IWeather;
 }
 
+// Forecast
+export interface IForecast {
+  list: [
+    {
+      dt: number;
+      main: {
+        temp: number;
+      };
+      weather: [
+        {
+          description: string;
+          icon: string;
+        }
+      ];
+    }
+  ];
+}
+
+export interface IForecastAction {
+  type: typeof FORECAST;
+  payload: IForecast;
+}
+
 // Settings
 export interface ISettings {
   location: {
@@ -52,6 +75,7 @@ export interface ISettingsAction {
 export interface IState {
   settings: ISettings;
   weather: IWeather;
+  forecast: IForecast;
 }
 
-export type StateActions = ISettingsAction | IWeatherAction;
+export type StateActions = ISettingsAction | IWeatherAction | IForecastAction;

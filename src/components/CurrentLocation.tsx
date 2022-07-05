@@ -1,49 +1,27 @@
-import { FC } from "react";
+import { days, months } from "../constants";
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+import { AppContext } from "../state/AppProvider";
+import { useContext } from "react";
 
 const formatDate = (date: Date) =>
-  days[date.getDay()] +
+  days.large[date.getDay()] +
   ", " +
   ("0" + date.getDate()).slice(-2) +
   " " +
-  months[date.getMonth()];
+  months.short[date.getMonth()];
 
-interface ICurrentLocation {
-  location: string;
-  date: Date;
-}
+const CurrentLocation = () => {
+  const { state } = useContext(AppContext);
+  const { weather } = state;
 
-const CurrentLocation: FC<ICurrentLocation> = ({ location, date }) => {
   return (
     <div className="flex justify-between items-center gap-4">
       <div>
-        <h3 className="text-2xl font-bold leading-7">{location}</h3>
+        <h3 className="text-2xl font-bold leading-7">
+          {weather.name + ", " + weather.sys.country}
+        </h3>
         <p className="text-chinese-silver font-semibold">
-          {formatDate(date)}
+          {formatDate(new Date(weather.dt * 1000))}
         </p>
       </div>
 

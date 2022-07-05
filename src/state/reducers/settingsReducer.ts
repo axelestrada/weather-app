@@ -1,5 +1,6 @@
+import { ISettings, StateActions } from "../interfaces";
+
 import { SETTINGS } from "../ActionTypes";
-import { ISettings, StateActions } from "./../interfaces";
 
 const settingsReducer = (settings: ISettings, action: StateActions) => {
   switch (action.type) {
