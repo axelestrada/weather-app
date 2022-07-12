@@ -1,6 +1,6 @@
 const SETTINGS = "SETTINGS";
-const WEATHER = "WEATHER";
+const CURRENT_WEATHER = "CURRENT_WEATHER";
 const FORECAST = "FORECAST"
 
-export default Object.freeze({ SETTINGS, WEATHER, FORECAST });
-export { SETTINGS, WEATHER, FORECAST };
+export default Object.freeze({ SETTINGS, CURRENT_WEATHER, FORECAST });
+export { SETTINGS, CURRENT_WEATHER, FORECAST };

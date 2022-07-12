@@ -5,7 +5,7 @@ import { weatherImageUrl } from "../functions";
 
 const CurrentWeather = () => {
   const { state } = useContext(AppContext);
-  const { weather } = state;
+  const { currentWeather } = state;
 
   return (
     <div className="flex flex-col gap-8">
@@ -14,25 +14,25 @@ const CurrentWeather = () => {
           <div>
             <img
               className="w-36 -mt-14 drop-shadow-2xl"
-              src={weatherImageUrl(weather.weather[0].icon)}
-              alt={weather.weather[0].description}
+              src={weatherImageUrl(currentWeather.weather[0].icon)}
+              alt={currentWeather.weather[0].description}
             />
           </div>
 
           <div className="text-white capitalize">
             <h3 className="font-bold text-xl leading-6">
-              {weather.weather[0].main}
+              {currentWeather.weather[0].main}
             </h3>
-            <h5 className="font-medium">{weather.weather[0].description}</h5>
+            <h5 className="font-medium">{currentWeather.weather[0].description}</h5>
           </div>
         </div>
 
         <div className="flex flex-col items-center gap-1">
           <h3 className="font-bold text-7xl leading-12 text-transparent bg-clip-text bg-gradient-to-b from-alice-blue to-pale-cornflower-blue">
-            {Math.round(weather.main.temp)}°
+            {Math.round(currentWeather.main.temp)}°
           </h3>
           <p className="text-white font-medium">
-            Feels like {Math.round(weather.main.feels_like)}°
+            Feels like {Math.round(currentWeather.main.feels_like)}°
           </p>
 
           <img className="w-24" src="/assets/images/breeze.png" alt="breeze" />
@@ -42,17 +42,17 @@ const CurrentWeather = () => {
       <div className="w-full flex justify-center gap-6">
         <DetailsItem
           image={{ src: "/assets/images/cloudy.png", alt: "cloudy" }}
-          value={weather.main.pressure + " hPa"}
+          value={currentWeather.main.pressure + " hPa"}
         />
 
         <DetailsItem
           image={{ src: "/assets/images/wind.png", alt: "wind" }}
-          value={Math.round(weather.wind.speed) + " km/h"}
+          value={Math.round(currentWeather.wind.speed) + " km/h"}
         />
 
         <DetailsItem
           image={{ src: "/assets/images/drop.png", alt: "drop" }}
-          value={weather.main.humidity + " %"}
+          value={currentWeather.main.humidity + " %"}
         />
       </div>
     </div>

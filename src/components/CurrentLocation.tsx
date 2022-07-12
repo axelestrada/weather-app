@@ -1,6 +1,7 @@
 import { days, months } from "../constants";
 
 import { AppContext } from "../state/AppProvider";
+import { UTCToHour } from "../functions";
 import { useContext } from "react";
 
 const formatDate = (date: Date) =>
@@ -12,17 +13,22 @@ const formatDate = (date: Date) =>
 
 const CurrentLocation = () => {
   const { state } = useContext(AppContext);
-  const { weather } = state;
+  const { currentWeather } = state;
 
   return (
     <div className="flex justify-between items-center gap-4">
       <div>
         <h3 className="text-2xl font-bold leading-7">
-          {weather.name + ", " + weather.sys.country}
+          {currentWeather.name + ", " + currentWeather.sys.country}
         </h3>
         <p className="text-chinese-silver font-semibold">
-          {formatDate(new Date(weather.dt * 1000))}
+          {formatDate(new Date(currentWeather.dt * 1000))}
+          {" - "}
+          {UTCToHour(currentWeather.dt).slice(-2) !== "00"
+            ? "Now"
+            : UTCToHour(currentWeather.dt)}
         </p>
+        <p className="text-chinese-silver font-semibold"></p>
       </div>
 
       <img

@@ -13,20 +13,22 @@ const Carousel: FC<ICarousel> = ({ children }) => {
 };
 
 interface ICarouselItem {
-  title: string;
+  time: string;
   image: {
     src: string;
     alt: string;
   };
-  value: string;
+  temperature: string;
   active?: boolean;
+  onClick?: () => void;
 }
 
 export const CarouselItem: FC<ICarouselItem> = ({
-  title,
+  time,
   image,
-  value,
+  temperature,
   active,
+  onClick
 }) => (
   <div
     className={`flex flex-col items-center justify-between h-34 py-4 px-4 font-semibold rounded-full ${
@@ -34,10 +36,11 @@ export const CarouselItem: FC<ICarouselItem> = ({
         ? "shadow-xl shadow-violets-are-blue-250 bg-gradient-to-b from-maximum-blue-purple to-violets-are-blue text-white"
         : "text-chinese-silver shadow-lg shadow-french-sky-blue-300"
     }`}
+    onClick={onClick}
   >
-    <h6 className="text-sm">{title}</h6>
+    <h6 className="text-sm">{time}</h6>
     <img className="w-10" src={image.src} alt={image.alt} />
-    <p className="text-lg">{value}</p>
+    <p className="text-lg">{temperature}</p>
   </div>
 );
 

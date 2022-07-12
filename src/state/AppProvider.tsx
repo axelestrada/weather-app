@@ -6,24 +6,21 @@ import {
   useReducer,
 } from "react";
 import {
+  ICurrentWeatherAction,
   IForecastAction,
   ISettingsAction,
   IState,
-  IWeather,
-  IWeatherAction,
   StateActions,
 } from "./interfaces";
 
+import currentWeatherReducer from "./reducers/currentWeatherReducer";
 import forecastReducer from "./reducers/forecastReducer";
 import settingsReducer from "./reducers/settingsReducer";
-import weatherReducer from "./reducers/weatherReducer";
 
-const APP_STATE_NAME = "GlobalState";
+const APP_STATE_NAME = "AppSettings";
 
-const initialState: IState = JSON.parse(
-  localStorage.getItem(APP_STATE_NAME)!
-) || {
-  settings: {
+const initialState: IState = {
+  settings: JSON.parse(localStorage.getItem(APP_STATE_NAME)!)?.settings || {
     location: {
       lat: 37.7749,
       lon: -122.4194,
@@ -34,7 +31,7 @@ const initialState: IState = JSON.parse(
     },
     timeFormat: "24",
   },
-  weather: {
+  currentWeather: {
     dt: 0,
     main: {
       feels_like: 0,
@@ -58,9 +55,31 @@ const initialState: IState = JSON.parse(
     wind: { speed: 0 },
   },
   forecast: {
-    list: [{
-      
-    }],
+    list: [
+      {
+        dt: 0,
+        main: {
+          feels_like: 0,
+          humidity: 0,
+          pressure: 0,
+          temp: 0,
+          temp_max: 0,
+          temp_min: 0,
+        },
+        name: "",
+        sys: {
+          country: "",
+        },
+        weather: [
+          {
+            description: "",
+            icon: "",
+            main: "",
+          },
+        ],
+        wind: { speed: 0 },
+      },
+    ],
   },
 };
 
@@ -70,19 +89,24 @@ const AppContext = createContext<{
 }>({ state: initialState, dispatch: () => null });
 
 const combinedReducers = (
-  { settings, weather, forecast }: IState,
-  action: ISettingsAction | IWeatherAction | IForecastAction
+  { settings, currentWeather, forecast }: IState,
+  action: ISettingsAction | ICurrentWeatherAction | IForecastAction
 ) => ({
   settings: settingsReducer(settings, action),
-  weather: weatherReducer(weather, action),
-  forecast: forecastReducer(forecast, action)
+  currentWeather: currentWeatherReducer(currentWeather, action),
+  forecast: forecastReducer(forecast, action),
 });
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(combinedReducers, initialState);
 
   useEffect(() => {
-    localStorage.setItem(APP_STATE_NAME, JSON.stringify(state));
+    localStorage.setItem(
+      APP_STATE_NAME,
+      JSON.stringify({
+        settings: state.settings,
+      })
+    );
   }, [state]);
 
   return (

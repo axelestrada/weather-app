@@ -1,28 +1,22 @@
+import { CURRENT_WEATHER, FORECAST } from "../state/ActionTypes";
 import Carousel, { CarouselItem } from "./Carousel";
+import { FC, useContext, useEffect, useState } from "react";
 import { UTCToHour, weatherImageUrl } from "../functions";
-import { useContext, useEffect, useState } from "react";
 
 import { AppContext } from "../state/AppProvider";
 import { BiChevronRight } from "react-icons/bi";
-import { FORECAST } from "../state/ActionTypes";
-import { IForecast } from "../state/interfaces";
-import { getForecast } from "../apiCalls";
+import { IWeather } from "../state/interfaces";
 
-const WeatherLater = () => {
+const WeatherLater: FC<{ now: IWeather }> = ({ now }) => {
   const { state, dispatch } = useContext(AppContext);
-  const { settings, forecast } = state;
+  const { forecast, currentWeather } = state;
 
-  useEffect(() => {
-    getForecast(
-      settings.location,
-      settings.units.temperature === "celsius" ? "metric" : "imperial"
-    ).then((forecastData: IForecast) =>
-      dispatch({
-        type: FORECAST,
-        payload: forecastData,
-      })
-    );
-  }, []);
+  const handleClick = (weather: IWeather) => {
+    dispatch({
+      type: CURRENT_WEATHER,
+      payload: {...weather, ...{sys: currentWeather.sys}},
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -36,15 +30,32 @@ const WeatherLater = () => {
       </div>
 
       <Carousel>
+        <CarouselItem
+          time="Now"
+          image={{
+            src: weatherImageUrl(now.weather[0].icon),
+            alt: now.weather[0].description,
+          }}
+          temperature={Math.round(now.main.temp) + "°"}
+          active={currentWeather.dt === now.dt}
+          onClick={() => {
+            handleClick(now);
+          }}
+        />
+
         {forecast.list.slice(0, 8).map((weather, index) => (
           <CarouselItem
             key={index}
-            title={UTCToHour(weather.dt)}
+            time={UTCToHour(weather.dt)}
             image={{
               src: weatherImageUrl(weather.weather[0].icon),
-              alt: weather.weather[0].description,
+              alt: weatherImageUrl(weather.weather[0].description),
             }}
-            value={Math.round(weather.main.temp) + "°"}
+            temperature={Math.round(weather.main.temp) + "°"}
+            active={currentWeather.dt === weather.dt}
+            onClick={() => {
+              handleClick(weather);
+            }}
           />
         ))}
       </Carousel>
